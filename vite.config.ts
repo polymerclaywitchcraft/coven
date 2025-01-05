@@ -8,6 +8,7 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   base: '/coven/',
+  assetsInclude: ['**/*.jpeg'],
   server: {
     host: '0.0.0.0'
   },

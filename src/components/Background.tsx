@@ -5,7 +5,7 @@ export const Background = () => (
     <div 
       className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-20"
       style={{
-        backgroundImage: 'url("https://i.imgur.com/XpxKo0N.png")',
+        backgroundImage: `url(/coven/background.jpeg)`,
         filter: 'grayscale(20%) contrast(120%)'
       }}
     />

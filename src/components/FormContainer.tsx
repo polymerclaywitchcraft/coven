@@ -13,12 +13,11 @@ export const FormContainer: React.FC<FormContainerProps> = ({ children }) => (
       </div>
       
       <h2 className="text-3xl font-bold text-center mb-2 text-red-200">
-        Join Our Coven
+        Join My Coven
       </h2>
       <p className="text-red-400/80 text-center mb-8">
         Subscribe to receive mystical updates and ancient wisdom
       </p>
-
       {children}
     </div>
   </div>
