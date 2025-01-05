@@ -1,24 +1,45 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import useScript from '../hooks/useScript';
+import Turnstile from "react-turnstile";
 
 export const SubscribeForm = () => {
 
-  useScript('https://sibforms.com/forms/end-form/build/main.js');
-  useScript('https://challenges.cloudflare.com/turnstile/v0/api.js');
-
   const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log('Subscribed:', email);
-  //   setEmail('');
-  // };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !token) { return; }
+    const body = new URLSearchParams();
+    body.append('EMAIL', email);
+    body.append('cf-turnstile-response', token);
+    fetch('https://abe0b1ef.sibforms.com/serve/MUIFALtzxdzIHyCqxQrMvsEGS_CNyFqqEFWfyfLjux7T_F3IYowms-3d9q_D7nZ-wuzyW2SjvmL1drRlr02zf6wzEOX1FIizhWZCVZrtU5t-GhNYElE-CpOMGYwzOYoMpccLLgxQbX2OxZlH6CF1y4jacIZ-zSOYwu4pCUyrX83IqaBFah_9PS66SHPpvbxac-kXsvelXCzHrVzZ?isAjax=1', {
+      method: 'POST',
+      body,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setSuccessMessage(data.message);
+        } else {
+          setErrorMessage(JSON.stringify(data.errors));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setErrorMessage('Something went wrong. Please try again.');
+      });
+    setEmail('');
+    setToken('');
+  };
 
   return (
-    <form id="sib-form" method="POST"
-    action="https://abe0b1ef.sibforms.com/serve/MUIFALtzxdzIHyCqxQrMvsEGS_CNyFqqEFWfyfLjux7T_F3IYowms-3d9q_D7nZ-wuzyW2SjvmL1drRlr02zf6wzEOX1FIizhWZCVZrtU5t-GhNYElE-CpOMGYwzOYoMpccLLgxQbX2OxZlH6CF1y4jacIZ-zSOYwu4pCUyrX83IqaBFah_9PS66SHPpvbxac-kXsvelXCzHrVzZ" 
-    data-type="subscription" className="space-y-4">
+    <form
+    onSubmit={handleSubmit}
+    data-type="subscription"
+    className="space-y-4">
       <div className="relative">
         <input
           id="EMAIL"
@@ -35,14 +56,20 @@ export const SubscribeForm = () => {
           required
         />
       </div>
-      
-      <div
-        className="cf-turnstile g-recaptcha"
-        data-sitekey="0x4AAAAAAA4oxLgoYmKUMCF4"
-        id="sib-captcha"
-        data-callback="handleCaptchaResponse"
-        data-language="en">
-      </div>
+
+      <Turnstile sitekey='0x4AAAAAAA4oxLgoYmKUMCF4' onVerify={(tkn) => setToken(tkn)}></Turnstile>
+
+      {successMessage && (
+        <div className="text-green-500">
+          {successMessage}
+        </div>
+      )}
+
+      {!errorMessage && (
+        <div className="text-red-500">
+          {errorMessage}
+        </div>
+      )}
 
       <button
         type="submit"
