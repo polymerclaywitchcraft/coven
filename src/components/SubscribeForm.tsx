@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
-import Turnstile from "react-turnstile";
 
 export const SubscribeForm = () => {
 
@@ -11,11 +10,11 @@ export const SubscribeForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !token) { return; }
+    if (!email) { return; }
     const body = new URLSearchParams();
     body.append('EMAIL', email);
     body.append('cf-turnstile-response', token);
-    fetch('https://abe0b1ef.sibforms.com/serve/MUIFALtzxdzIHyCqxQrMvsEGS_CNyFqqEFWfyfLjux7T_F3IYowms-3d9q_D7nZ-wuzyW2SjvmL1drRlr02zf6wzEOX1FIizhWZCVZrtU5t-GhNYElE-CpOMGYwzOYoMpccLLgxQbX2OxZlH6CF1y4jacIZ-zSOYwu4pCUyrX83IqaBFah_9PS66SHPpvbxac-kXsvelXCzHrVzZ?isAjax=1', {
+    fetch('https://abe0b1ef.sibforms.com/serve/MUIFADPQXHzfITMyKm5XjT6lKxzSrnc8rdqx9dqMgivAJWLKziMrl-3M6yw3YZJCd8qF-1jgTlbM-EbOqg_3tfYPEujays_di21X4DpwvUyCrVPIgoYh1NPiWwqXri5sqBK2Pdz9jkTPJ7cFpaMX6VE1eoxekQGptDGkgP79dtKLGdeEWdXX1ycBigPPTZlvu44qGAuDqpgwMuj5?isAjax=1', {
       method: 'POST',
       body,
     })
@@ -56,8 +55,6 @@ export const SubscribeForm = () => {
           required
         />
       </div>
-
-      <Turnstile sitekey='0x4AAAAAAA4oxLgoYmKUMCF4' onVerify={(tkn) => setToken(tkn)}></Turnstile>
 
       {successMessage && (
         <div className="text-green-500">
